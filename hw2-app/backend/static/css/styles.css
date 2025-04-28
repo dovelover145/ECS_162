@@ -1,0 +1,282 @@
+/* Source: https://www.1001fonts.com/canterbury-font.html */
+@font-face {
+    font-family: 'Canterbury';
+    src: url('/fonts/Canterbury.ttf') format('truetype');
+}
+
+/* Contains all of the header content, including the website versions, buttons, title, etc. */
+#header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 5px; /* Mantain some space between the flex items in this container */
+}
+
+/* Contains the opening line (of website versions and buttons) at the top of the page */
+#opening-line-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%; /* Cover the entire screen */
+}
+
+/* The buttons */
+.opening-line-button {
+    background-color: steelblue;
+    border-color: steelblue;
+    border-radius: 5px; /* Curvature of the button */
+    color: white;
+    font-family: Georgia;
+    font-size: 1vw;
+    font-weight: 1000;
+}
+
+.opening-line-button:hover {
+    background-color: rgb(0, 95, 170);
+    border-color: rgb(0, 95, 170);
+    cursor: pointer;
+}
+
+/* The listing of website versions */
+#website-versions {
+    color: black;
+    font-family: 'Georgia';
+    text-align: center;
+    font-size: 1vw;
+    word-spacing: 3vw;
+    position: absolute; /* The side elements (i.e. the buttons) will pretend like this element doesn't exist */
+    left: 50%; /* Shift the left edge of this div container to the middle of the parent div container */
+    transform: translateX(-50%); /* Shift the div container left by half of its width (i.e. center it about the main axis of the parent div container) */
+    /* transform is used to visually manipulate elements with translations, rotations, and scaling without other elements reacting to those changes */
+}
+
+/* Contains the main title */
+#title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.title-element {
+    color: black;
+    font-family: 'Helvetica-Nue';
+    font-size: 1.25vw;
+}
+
+/* The actual title */
+#title {
+    color: black;
+    font-family: 'Canterbury';
+    font-size: 5vw;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#percentage {
+    color: green;
+}
+
+.dividing-line {
+    width: 100%;
+    border: 1px solid black;
+}
+
+#live-line {
+    color: black;
+    font-family: 'Georgia';
+    font-size: 1.25vw;
+}
+
+.live {
+    color: red;
+}
+
+#gap {
+    margin: 0.5px;
+}
+
+/* Contains an entire "snippet" of an article, along with any images */
+.article-container {
+    display: grid;
+    grid-template-rows: repeat(4, auto);
+    grid-template-columns: repeat(4, auto);
+    gap: 15px;
+}
+
+#first {
+    grid-row: 1 / span 4;
+    grid-column: 1;
+    border-right: 2px solid darkgray;
+    padding: 10px;
+}
+
+#second {
+    grid-row: 1 / span 4;
+    grid-column: 2 / span 2;
+}
+
+#third {
+    grid-row: 1 / span 4;
+    grid-column: 4 / span 1;
+    border-left: 2px solid darkgray;
+    padding: 10px;
+}
+
+.article-header {
+    font-family: 'Georgia';
+    font-size: 1.5vw;
+    text-align: center;
+}
+
+.article-paragraph {
+    color: darkslategrey;
+    font-family: 'Georgia';
+    text-align: center;
+}
+
+#main-article-header {
+    font-family: 'Georgia';
+    font-size: 2.5vw;
+    text-align: center;
+}
+
+.image {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Smaller than a laptop screen (i.e. tablet screens) */
+@media only screen and (max-width: 1023px) {
+    .article-container {
+        display: grid;
+        grid-template-rows: repeat(4, auto);
+        grid-template-columns: repeat(4, auto);
+    }
+    
+    #first {
+        grid-row: 1 / span 2;
+        grid-column: 3 / span 2;
+        border-right: none;
+        border-bottom: 2px solid darkgray;
+        padding: 15.5px;
+    }
+    
+    #second {
+        grid-row: 1 / span 4;
+        grid-column: 1 / span 2;
+        border-right: 2px solid darkgray;
+        padding: 15.5px;
+    }
+
+    #third {
+        grid-row: 3 / span 2;
+        grid-column: 3 / span 2;
+        border-left: none;
+    }
+
+    #main-article-header {
+        font-size: 2.5vw;
+    }
+
+    .article-header {
+        font-size: 1.75vw;
+    }
+}
+
+/* Smaller than a tablet (i.e. mobile phone screens) */
+@media only screen and (max-width: 767px) {
+    #header-container {
+        padding-top: 10px;
+        gap: 1.5px;
+    }
+
+    #opening-line-container {
+        display: none;
+    }
+
+    .title-element {
+        display: none;
+    }
+
+    #title {
+        color: black;
+        font-family: 'Canterbury';
+        font-size: 7.5vw;
+        position: relative;
+    }
+
+    #live-line {
+        font-size: 2vw;
+    }
+
+    /*
+    .opening-line-button {
+        font-size: 1vw;
+    }
+
+    #website-versions {
+        font-size: 1.5vw;
+        word-spacing: 1vw;
+    }
+    
+    .title-element {
+        font-size: 1.5vw;
+    }
+
+    #live-line {
+        font-size: 1.5vw;
+    }
+
+    #gap {
+        margin: 0.5px;
+    }
+    */
+
+    .article-container {
+        display: grid;
+        grid-template-rows: repeat(16, auto);
+        grid-template-columns: 1fr;
+        gap: 0px;
+    }
+    
+    #first {
+        grid-row: 2;
+        grid-column: 1;
+        border-right: none;
+    }
+    
+    #second {
+        grid-row: 1;
+        grid-column: 1;
+        border-right: none;
+        border-bottom: 2px solid darkgray;
+        padding: 15px;
+    }
+
+    #third {
+        grid-row: 3;
+        grid-column: 1;
+        border-left: none;
+        padding: 15px;
+    }
+
+    .article-header {
+        font-size: 3vw;
+    }
+
+    .article-paragraph {
+        font-size: 2.5vw;
+    }
+
+    #main-article-header {
+        font-size: 3.5vw;
+    }
+}

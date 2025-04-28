@@ -1,0 +1,4 @@
+# Contains our private key (which shouldn't be committed to GitHub)
+.env
+
+.DS_Store

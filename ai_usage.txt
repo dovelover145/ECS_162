@@ -1,0 +1,24 @@
+*** Assignment 1 ***
+
+AI Usage:
+    -How to get a New York Times style font for the title
+    -Font-face
+    -How to get the date in Javascript
+    -Other various questions about HTML/CSS
+    -Debugging
+
+Stack Overflow:
+    -How to get the date in Javascript and insert it into an HTML file
+
+I used ChatGPT. It's good at explaining how to do things. It's less useful for debugging.
+I tried to figure out an issue, but ended up looking online and figured out that I needed to
+set the wrapping attribute to "nowrap". I think ChatGPT and other LLMs are useful for learning
+programming languages when compared to other resources.
+
+*** Assignment 2 ***
+
+AI Usage
+    -URL and URLSearchParams
+
+I used ChatGPT. It gave a good way to represent the parameters of the URL without
+having to manually change the URL string every time.
