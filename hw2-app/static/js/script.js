@@ -34,7 +34,7 @@
                     "api-key": `${apiKey}`
                 }
             ).toString();
-            console.log(url.toString())
+            console.log(url.toString());
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error("Couldn't retrieve the article content");
@@ -66,7 +66,9 @@
                 }
                 articleIdx++;
             }
-        } catch (error) {}
+        } catch (error) {
+            throw new Error("Couldn't translate the article content");
+        }
     }
 
     async function getApiKey() {

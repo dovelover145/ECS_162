@@ -1,7 +1,7 @@
 /* Source: https://www.1001fonts.com/canterbury-font.html */
 @font-face {
-    font-family: 'Canterbury';
-    src: url('/fonts/Canterbury.ttf') format('truetype');
+    font-family: "Canterbury";
+    src: url("/fonts/Canterbury.ttf") format("truetype");
 }
 
 /* Contains all of the header content, including the website versions, buttons, title, etc. */
@@ -30,7 +30,7 @@
     border-color: steelblue;
     border-radius: 5px; /* Curvature of the button */
     color: white;
-    font-family: Georgia;
+    font-family: "Georgia";
     font-size: 1vw;
     font-weight: 1000;
 }
@@ -44,7 +44,7 @@
 /* The listing of website versions */
 #website-versions {
     color: black;
-    font-family: 'Georgia';
+    font-family: "Georgia";
     text-align: center;
     font-size: 1vw;
     word-spacing: 3vw;
@@ -66,14 +66,14 @@
 
 .title-element {
     color: black;
-    font-family: 'Helvetica-Nue';
+    font-family: "Helvetica-Nue";
     font-size: 1.25vw;
 }
 
 /* The actual title */
 #title {
     color: black;
-    font-family: 'Canterbury';
+    font-family: "Canterbury";
     font-size: 5vw;
     position: absolute;
     left: 50%;
@@ -91,7 +91,7 @@
 
 #live-line {
     color: black;
-    font-family: 'Georgia';
+    font-family: "Georgia";
     font-size: 1.25vw;
 }
 
@@ -131,19 +131,19 @@
 }
 
 .article-header {
-    font-family: 'Georgia';
+    font-family: "Georgia";
     font-size: 1.5vw;
     text-align: center;
 }
 
 .article-paragraph {
     color: darkslategrey;
-    font-family: 'Georgia';
+    font-family: "Georgia";
     text-align: center;
 }
 
 #main-article-header {
-    font-family: 'Georgia';
+    font-family: "Georgia";
     font-size: 2.5vw;
     text-align: center;
 }
@@ -208,7 +208,7 @@
 
     #title {
         color: black;
-        font-family: 'Canterbury';
+        font-family: "Canterbury";
         font-size: 7.5vw;
         position: relative;
     }

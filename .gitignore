@@ -1,4 +1,3 @@
-# Contains our private key (which shouldn't be committed to GitHub)
 .env
-
+node_modules/
 .DS_Store
