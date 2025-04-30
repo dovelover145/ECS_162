@@ -19,6 +19,16 @@ programming languages when compared to other resources.
 
 AI Usage
     -URL and URLSearchParams
+    -Unit testing and mocking with Jest
+    -Scoping with the try block
+
+Stack Overflow
+    -Checking if something is undefined
+
+YouTube
+    -Introduction to Jest: https://www.youtube.com/watch?v=FgnxcUQ5vho
 
 I used ChatGPT. It gave a good way to represent the parameters of the URL without
-having to manually change the URL string every time.
+having to manually change the URL string every time. I also learned unit testing with
+Jest, along with mocking fetch. It was useful. Using good abstractions (like URL and
+URLSearchParams) makes coding easier.
