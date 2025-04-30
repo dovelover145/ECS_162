@@ -1,3 +1,8 @@
+/*
+1. npm init -y (package.json)
+2. npm install --save-dev jest (package-lock.json and node_modules)
+*/
+
 const {getApiKey, insertArticleContent} = require("../static/js/script.js")
 
 describe("Testing getApiKey()", () => {

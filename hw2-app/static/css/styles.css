@@ -115,7 +115,7 @@
     grid-row: 1 / span 4;
     grid-column: 1;
     border-right: 2px solid darkgray;
-    padding: 10px;
+    padding: 15.125px;
 }
 
 #second {
@@ -127,7 +127,7 @@
     grid-row: 1 / span 4;
     grid-column: 4 / span 1;
     border-left: 2px solid darkgray;
-    padding: 10px;
+    padding: 15.125px;
 }
 
 .article-header {
