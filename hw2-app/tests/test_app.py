@@ -29,7 +29,6 @@ def test_valid_route(test_client):
         expected_response = file.read()
     assert actual_response.data.decode() == expected_response
 
-
 def test_invalid_route(test_client):
     actual_response = test_client.get("/invalid/route")
     assert actual_response.status_code == 200
