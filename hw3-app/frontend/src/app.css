@@ -1,7 +1,7 @@
 /* Source: https://www.1001fonts.com/canterbury-font.html */
 @font-face {
     font-family: "Canterbury";
-    src: url("assets/fonts/Canterbury.ttf") format("truetype");
+    src: url("./assets/fonts/Canterbury.ttf") format("truetype");
 }
 
 /* Contains all of the header content, including the website versions, buttons, title, etc. */

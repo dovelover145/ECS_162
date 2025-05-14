@@ -1,5 +1,7 @@
 <script lang="ts">
     import manhattanSkyline from './assets/images/photo-1570304816841-906a17d7b067.jpeg';
+
+    function logIn() {} /* Here is where the logic for logging in with Dex will go */
 </script>
 
 <main>
@@ -10,7 +12,7 @@
                 <div id="website-versions">U.S. INTERNATIONAL CANADA ESPAÑOL 中文</div>
                 <div>
                     <button class="opening-line-button">SUBSCRIBE FOR 1$/WEEK</button>
-                    <button class="opening-line-button">LOG IN</button>
+                    <button class="opening-line-button" on:click={logIn}>LOG IN</button>
                 </div>
             </div>
             <div id="title-container">
@@ -74,6 +76,7 @@
                 -->
             </div>
         </div>
+        <div id="comment-box"></div>
     </main>
 </main>
 
