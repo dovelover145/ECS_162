@@ -1,22 +1,19 @@
 import {mount} from "svelte";
-import "./app.css";
+import "./app.css"; // Works without this
 import App from "./App.svelte";
 
 const app = mount(App, {target: document.getElementById('app')!,});
-export default app;
+export default app; // Works without this
 
-// "use strict";
 (function() {
-    if (typeof window != "undefined") { /* Will skip over this for unit tests: https://stackoverflow.com/questions/14164505/javascript-window-is-not-defined */
-        window.addEventListener("load", init);
-    }
+    window.addEventListener("load", init);
 
-    function init() { /* Useful resource: https://stackoverflow.com/questions/4904667/html-how-do-articleIdx-insert-dynamic-date-in-webpage */
+    function init() {
         insertDate();
         insertArticleContent();
     }
 
-    function insertDate() {
+    function insertDate() { // Useful resource: https://stackoverflow.com/questions/4904667/html-how-do-articleIdx-insert-dynamic-date-in-webpage
         const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         const date = new Date();
@@ -24,16 +21,16 @@ export default app;
         const dayNum = date.getDate();
         const month = months[date.getMonth()];
         const dayOfWeek = days[date.getDay()];
-        document.getElementById("date").innerHTML = `${dayOfWeek}, ${month} ${dayNum}, ${year}<br>
+        (document.getElementById("date") as HTMLElement).innerHTML = `${dayOfWeek}, ${month} ${dayNum}, ${year}<br>
                                                     <br>
                                                     Daily Paper`;
     }
 
     async function insertArticleContent() {
         try {
-            var apiKey = await getApiKey(); /* Use var so that apiKey is accessible outside of the try block */
+            var apiKey = await getApiKey(); // Use var so that apiKey is accessible outside of the try block
         } catch (error) {
-            throw new Error(error);
+            throw new Error((error as Error).message);
         }
         const baseUrl = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
         const url = new URL(baseUrl);
@@ -80,19 +77,10 @@ export default app;
             throw new Error("Couldn't retrieve the API key");
         }
         try {
-            var respObj = await resp.json(); /* let and const are not visible outside of the try block; var is function-scoped, so it is */
+            var respObj = await resp.json(); // let and const are not visible outside of the try block; var is function-scoped, so it is
         } catch (error) {
             throw new Error("Couldn't translate the received API key");
         }
         return respObj.apiKey;
     }
-
-    /*
-    if (typeof module != "undefined") {
-        module.exports = {
-            getApiKey,
-            insertArticleContent
-        };
-    } 
-    */
 })();
