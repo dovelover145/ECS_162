@@ -1,0 +1,19 @@
+# Stage 1: Build Svelte frontend
+FROM node:18 as frontend
+# Stage 2: Build Flask backend and combine
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Install backend requirements
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy Flask code
+COPY backend/ .
+
+# Copy built frontend files
+COPY templates/index.html /app/templates/index.html
+COPY /static /app/static
+
+CMD ["python", "app.py"]
