@@ -23,7 +23,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dex
-    container_name: dex
     volumes:
       - ./config/dex:/etc/dex
     ports:

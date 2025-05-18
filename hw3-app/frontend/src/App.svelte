@@ -2,36 +2,62 @@
     import Comment from "./lib/Comment.svelte";
 
     /*
-     -This default image will be displayed if the NTY API isn't working
+     -This default image will be displayed if the NYT API isn't working
      -Link: https://unsplash.com/photos/chrysler-building-new-york-aTWNx7yoJWo
      -By Mark Boss
      -Free to use under the Unsplash License 
     */
     import defaultImage from "./assets/images/photo-1570304816841-906a17d7b067.jpeg";
 
-    /* 
-     -This keeps track of whether the user is logged in or not 
-     -If the user is logged in (i.e. true), the comments section is displayed
-    */
-    let loggedIn = $state(false);
+    let loggedIn = $state(false); // Keeps track of whether the user is logged in or not
+    let comments = $state([]); // Stores comments
+    let user = $state(""); // Stores the current user
+    let curComment = $state(""); // Stores the current comment entered by the user
 
-    /*
-     -This is where comments (from the backend's associated database) are stored
-     -Comments consist of a username, the comment itself, and an array of subcomments (where each has a username and comment)
-    */
-    let comments = $state([{username: "Bob Bobberton", comment: "Svelte rocks!", subcomments: [{username: "King Joe III", comment: "Yes!"}]}, {username: "Papa John", comment: "Want some pizza?", subcomments: []}]);
+    window.addEventListener("DOMContentLoaded", getUser); // Gets the current user
 
-    let commentUsername = $state(""); // Stores the current username
-    let commentComment = $state(""); // Stores the current comment
+    async function getUser() {
+        try {
+            const resp = await fetch(
+                "http://localhost:8000/get_user",
+                {credentials: "include"} // Tells browser to send cookie; otherwise, it doesn't work
+            ); // Get the user that logged in
+            if (!resp.ok) {
+                throw new Error("Failed to log in");
+            }
+            const respObj = await resp.json();
+            if (respObj.valid) { // There is a valid user logged in
+                user = respObj.username;
+                getComments(); // Get the comments from the database
+                loggedIn = true;
+            }
+        } catch (error) {
+            // Swallow it
+        }
+    }
+
+    async function getComments() {
+        try {
+            const resp = await fetch("http://localhost:8000/get_comments");
+            if (!resp.ok) {
+                throw new Error("Failed to get the comments");
+            }
+            const respObj = await resp.json();
+            console.log(respObj);
+            comments = respObj;
+        } catch (error) {
+            console.log(error);
+            alert(error.message || "Something went wrong while getting the comments");
+        }
+    }
     
     /*
      -This function is called when the user presses the login button
-     -It will route the user to the Dex UI to enter their information (through a Flask route)
-     -Flask will handle the rest
+     -It will route the user to the Dex UI to enter their login information (through a Flask route)
+     -Flask will eventually redirect the user back to the web page (now being logged in)
     */
-    function logIn() {
-        // window.location.href = "http://dex:5556/.well-known/openid-configuration"; // Point to a Flask route?
-        loggedIn = true;
+    async function logIn() {
+        window.location.href = "http://localhost:8000/login";
     }
 
     /*
@@ -40,16 +66,34 @@
     */
     function logOut() {
         loggedIn = false;
+        user = "";
+        comments = [];
+        window.location.href = "http://localhost:8000/logout";
     }
 
-    function postComment(event: Event) {
-        event.preventDefault();
-        comments = [{username: commentUsername, comment: commentComment, subcomments: []}, ...comments];
-        commentUsername = "";
-        commentComment = "";
-    }
-
-    function deleteComment() {
+    async function postComment(event: Event) {
+        event.preventDefault(); // Don't refresh the page
+        if (curComment.trim() == "") { // Prevents comments with only whitespace from falling through
+            return
+        }
+        try {
+            const resp = await fetch("http://localhost:8000/post_comment", { // Store in the database through the Flask backend route
+                method: "POST", 
+                headers: {"Content-Type": "application/json"}, 
+                body: JSON.stringify({username: user, comment: curComment})
+                });
+            if (!resp.ok) {
+                throw new Error("Failed to post the comment");
+            }
+            const respObj = await resp.json();
+            const _id = respObj._id; // Used for uniquely identifying comments
+            comments = [{_id: _id, username: user, comment: curComment}, ...comments];
+        } catch(error) { // The comment-posting had issues
+            console.log(error);
+            alert(error.message || "Something went wrong while posting the comment");
+        } finally {
+            curComment = ""; // Reset
+        }
     }
 </script>
 
@@ -61,9 +105,9 @@
             <div>
                 <button class="opening-line-button">SUBSCRIBE FOR 1$/WEEK</button>
                 {#if !loggedIn}
-                    <button class="opening-line-button" on:click={logIn}>LOG IN</button> <!-- This is the login button -->
+                    <button class="opening-line-button" onclick={logIn}>LOG IN</button> <!-- This is the login button -->
                 {:else}
-                    <button class="opening-line-button" on:click={logOut}>LOG OUT</button> <!-- This is the logout button -->
+                    <button class="opening-line-button" onclick={logOut}>LOG OUT</button> <!-- This is the logout button -->
                 {/if}
             </div>
         </div>
@@ -104,19 +148,16 @@
     <hr class="dividing-line">
     {#if loggedIn} <!-- Comments section -->
         <div id="comments-container">
-            <h1>Comments</h1>
-            <form on:submit={postComment}>
+            <h3>Comments</h3>
+            <form onsubmit={postComment}>
                 <label>
-                    Username: <input type="text" bind:value={commentUsername} />
-                </label>
-                <label>
-                    Comment: <input type="text" bind:value={commentComment} />
+                    Post a Comment: <input type="text" bind:value={curComment} />
                 </label>
                 <button type="submit">Enter</button>
             </form>
         </div>
         {#each comments as comment}
-            <Comment bind:username={comment.username} bind:comment={comment.comment} bind:subcomments={comment.subcomments}></Comment>
+            <Comment bind:_id={comment._id} bind:username={comment.username} bind:comment={comment.comment}></Comment>
         {/each}
     {:else}
         <div id="log-in-container">
@@ -134,7 +175,25 @@
         flex-direction: column;
         flex-wrap: nowrap;
         font-family: Georgia;
-        font-size: small;
+    }
+
+    #comments-container form input {
+        font-family: Georgia;
+    }
+
+    #comments-container form button {
+        background-color: steelblue;
+        border-color: steelblue;
+        border-radius: 5px; /* Curvature of the button */
+        color: white;
+        font-family: Georgia;
+        font-weight: 1000;
+    }
+
+    #comments-container form button:hover {
+        background-color: rgb(0, 95, 170);
+        border-color: rgb(0, 95, 170);
+        cursor: pointer;
     }
 
     #log-in-container {
@@ -144,6 +203,5 @@
         flex-direction: column;
         flex-wrap: nowrap;
         font-family: Georgia;
-        font-size: medium;
     }
 </style>

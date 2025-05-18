@@ -1,4 +1,9 @@
 issuer: http://localhost:5556
+authorization_endpoint: http://dex:5556/auth
+token_endpoint: http://dex:5556/token
+jwks_uri": http://localhost:5556/keys
+userinfo_endpoint: http://localhost:5556/userinfo
+device_authorization_endpoint: http://localhost:5556/device/code
 
 # Storage configuration to use MongoDB
 storage:
@@ -10,7 +15,7 @@ web:
 staticClients:
   - id: ${OIDC_CLIENT_ID}
     redirectURIs:
-      - http://localhost:8000/auth/callback
+      - http://localhost:8000/authorize
     name: ${OIDC_CLIENT_NAME}
     secret: ${OIDC_CLIENT_SECRET}
 

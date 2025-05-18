@@ -72,7 +72,7 @@ export default app; // Works without this
     }
 
     async function getApiKey() {
-        const resp = await fetch("/api/key");
+        const resp = await fetch("http://localhost:8000/api/key");
         if (!resp.ok) {
             throw new Error("Couldn't retrieve the API key");
         }
