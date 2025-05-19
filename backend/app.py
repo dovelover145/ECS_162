@@ -6,6 +6,7 @@ from flask import render_template, Flask, jsonify, send_from_directory,request,s
 import os
 from flask_cors import CORS
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 '''source: https://www.geeksforgeeks.org/flask-rendering-templates/
 https://www.geeksforgeeks.org/mongodb-database-collection-and-document/
 https://www.geeksforgeeks.org/how-to-use-flask-session-in-python-flask/
@@ -30,7 +31,7 @@ oauth.register(
     name=os.getenv('OIDC_CLIENT_NAME'),
     client_id=os.getenv('OIDC_CLIENT_ID'),
     client_secret=os.getenv('OIDC_CLIENT_SECRET'),
-    #server_metadata_url='http://dex:5556/.well-known/openid-configuration',
+    # server_metadata_url='http://dex:5556/.well-known/openid-configuration',
     authorization_endpoint="http://localhost:5556/auth",
     token_endpoint="http://dex:5556/token",
     jwks_uri="http://dex:5556/keys",
@@ -46,17 +47,21 @@ def get_user():
 
 @app.route('/delete_comment', methods=['POST'])
 def delete_comment():
-    try:
+        print(">>> /delete_comment triggered", flush=True)
         data = request.get_json(force=True)
+        print(">>> Raw data:", data)
         comment_id = data.get('id')
+        print(">>> Received comment_id:", comment_id, ",type:", type(comment_id), flush=True)
+        try:
+            obj_id = ObjectId(comment_id)
+        except Exception as e:
+            print("!!! Invalid ObjectId:", comment_id, flush=True)
+            return jsonify({'status': 'error', 'message': 'Invalid comment ID'}), 400
         mongo.db.comments.update_one(
-            {'_id': ObjectId(comment_id)},
+            {'_id': obj_id},
             {'$set': {'comment': 'COMMENT REMOVED BY MODERATOR!'}}
         )
         return jsonify({'status': 'success'})
-    except Exception as e:
-        print("!!! ERROR deleting comment:", str(e))
-        return jsonify({'status': 'error', 'message': str(e)}), 500
 @app.route('/get_comments', methods=['POST'])
 def get_comments():
     data = request.json
@@ -71,8 +76,6 @@ def get_comments():
 def made_comments():
     try:
         data = request.get_json(force=True)
-        print(">>> [made_comments] Received data:", data)
-
         comment = data.get('comment')
         article_url = data.get('article_url')
         parent_id = data.get('parent_id')
@@ -81,6 +84,8 @@ def made_comments():
 
         if parent_id:
             parent_obj_id = parent_id
+        else:
+            parent_obj_id = None
 
 
         comment_doc = {
@@ -89,9 +94,6 @@ def made_comments():
             'comment': comment,
             'parent_id': parent_obj_id
         }
-
-        print(">>> Inserting comment_doc:", comment_doc)
-
         inserted = mongo.db.comments.insert_one(comment_doc)
 
         return jsonify({

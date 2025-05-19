@@ -15,7 +15,7 @@
                     <div id="website-versions">U.S. INTERNATIONAL CANADA ESPAÑOL 中文</div>
                     <div>
                         <button class="opening-line-button">SUBSCRIBE FOR 1$/WEEK</button>
-                        <button onclick="login()">Login</button>
+                        <button class="opening-line-button" onclick="login()">Login</button>
                     </div>
                 </div>
                 <div id="title-container">
@@ -83,12 +83,12 @@
          <!-- Sidebar menu here-->
         <div id="comment_sidebar" class="sidebar hidden">
   <h3>Comments</h3>
-  <ul id="sidebar_comments_list"></ul>
   <form id="sidebar_make_comments" onsubmit="submit_Comment(event)">
     <textarea rows="2" placeholder="Write your comment"></textarea>
     <button type="submit">Post</button>
     <button type="button" onclick="close_sidebar(false)">Close</button>
   </form>
+  <ul id="sidebar_comments_list"></ul>
 </div>
     </body>
 </html>

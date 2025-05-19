@@ -75,7 +75,6 @@
         //get the specific url for later
         document.getElementById("sidebar_make_comments").dataset.articleUrl = articleUrl;
         document.getElementById("sidebar_make_comments").dataset.parentId = "";
-
         const res = await fetch("/get_comments", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -103,13 +102,21 @@
 
     function listComment(comment,commentList){
         //this funtion will show individual
-        const li = document.createElement("li");
-        li.innerHTML = `<b>${comment.user}</b><br>${comment.comment}`;
-        const comment_section = document.createElement("div");
-        const replyBtn = document.createElement("button");
+            const li = document.createElement("li");
+            li.innerHTML = `<b>${comment.user}</b><br>${comment.comment}`;
+            const comment_section = document.createElement("div");
+            const replyBtn = document.createElement("button");
 
-        replyBtn.innerText = "Reply";//able to reply to indicidual reply
-        replyBtn.onclick = () => {
+            replyBtn.innerText = "Reply";//able to reply to indicidual reply
+            replyBtn.onclick = () => {
+            const existing = comment_section.querySelector(".reply-box");
+            if (existing) {
+                existing.remove();
+                return;
+            } //allow click to remove display input area
+
+            const container = document.createElement("div");
+            container.className = "reply-box";
             if (comment_section.querySelector("textarea")) return;
             const input = document.createElement("textarea");
             input.placeholder = "Type here";
@@ -121,35 +128,37 @@
                 const articleUrl = document.getElementById("sidebar_make_comments").dataset.articleUrl;
                 submitComment_Uni(reply, articleUrl, comment._id);
             };
-            comment_section.appendChild(input);
-            comment_section.appendChild(submitBtn);
-        };
-        comment_section.appendChild(replyBtn);
-        console.log(">>> currentUser check:", currentUser);
-        if (currentUser.name ==="admin" || currentUser.name === "moderator"){
-            console.log(">>> checking corrctly:", currentUser);
-            const deleteBtn = document.createElement("button");
-            deleteBtn.innerText = "Delete";
-            deleteBtn.onclick = async () => {
-                await fetch("/delete_comment", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ id: comment._id })
-                });
-                //rerender
-                openSidebar(document.getElementById("sidebar_make_comments").dataset.articleUrl);
+            container.appendChild(input);
+            container.appendChild(submitBtn);
+            comment_section.appendChild(container);
             };
-            comment_section.appendChild(deleteBtn);
-        }
+            comment_section.appendChild(replyBtn);
+            console.log(">>> currentUser check:", currentUser);
+            if (currentUser.name ==="admin" || currentUser.name === "moderator"){
+                const deleteBtn = document.createElement("button");
+                deleteBtn.innerText = "Delete";
+                deleteBtn.classList.add("delete-button");
+                deleteBtn.onclick = async () => {
+                    console.log(">>> Deleting comment id:", comment._id);
+                    await fetch("/delete_comment", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ id: comment._id })
+                    });
+                    //rerender
+                    openSidebar(document.getElementById("sidebar_make_comments").dataset.articleUrl);
+                };
+                comment_section.appendChild(deleteBtn);
+            }
 
-        li.appendChild(comment_section);
-        if (comment.children && comment.children.length > 0) {
-            const childrenUl = document.createElement("ul");
-            comment.children.forEach(child => listComment(child, childrenUl));
-            li.appendChild(childrenUl);//render the child comments and append them
+            li.appendChild(comment_section);
+            if (comment.children && comment.children.length > 0) {
+                const childrenUl = document.createElement("ul");
+                comment.children.forEach(child => listComment(child, childrenUl));
+                li.appendChild(childrenUl);//render the child comments and append them
+            }
+            commentList.appendChild(li);
         }
-        commentList.appendChild(li);
-    }
     function submit_Comment(event) {
     event.preventDefault();
     const form = event.target;
@@ -164,7 +173,11 @@
     function submitComment_Uni(commentText, articleUrl, parentid = null) {
         const comment = commentText.trim();
         if (!comment) return;
-
+            if (!currentUser || !currentUser.name) {
+            alert("You need to login to submit comments!");
+            login();
+            return;
+        }
         fetch("/made_comments", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
