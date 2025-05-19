@@ -1,8 +1,9 @@
+# Don't want a security breach, right?
 .env
 
 node_modules/
 
 __pycache__/
-.pytest_cache
+.pytest_cache/
 
 .DS_Store

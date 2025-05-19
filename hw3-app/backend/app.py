@@ -7,6 +7,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 """
+Useful links:
 https://www.geeksforgeeks.org/how-to-use-flask-session-in-python-flask/
 https://www.geeksforgeeks.org/flask-rendering-templates/
 https://www.geeksforgeeks.org/mongodb-database-collection-and-document/
@@ -78,7 +79,7 @@ def user():
 
 @app.route("/get_comments")
 def get_comments():
-    comments = list(mongo.db.comments.find())
+    comments = list(mongo.db.comments.find().sort({"_id": -1})) # Sort in the reverse order they were inserted in
     for comment in comments:
         comment["_id"] = str(comment["_id"])
     return jsonify(comments)

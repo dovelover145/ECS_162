@@ -21,9 +21,10 @@ export default app; // Works without this
         const dayNum = date.getDate();
         const month = months[date.getMonth()];
         const dayOfWeek = days[date.getDay()];
-        (document.getElementById("date") as HTMLElement).innerHTML = `${dayOfWeek}, ${month} ${dayNum}, ${year}<br>
-                                                    <br>
-                                                    Daily Paper`;
+        (document.getElementById("date") as HTMLElement).innerHTML = 
+            `${dayOfWeek}, ${month} ${dayNum}, ${year}<br>
+            <br>
+            Daily Paper`;
     }
 
     async function insertArticleContent() {

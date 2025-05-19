@@ -14,13 +14,26 @@
     let user = $state(""); // Stores the current user
     let curComment = $state(""); // Stores the current comment entered by the user
 
-    window.addEventListener("DOMContentLoaded", getUser); // Gets the current user
+    async function getComments() {
+        try {
+            const resp = await fetch("http://localhost:8000/get_comments");
+            if (!resp.ok) {
+                throw new Error("Failed to get the comments");
+            }
+            const respObj = await resp.json();
+            console.log(respObj);
+            comments = respObj; // Stores the array of comments
+        } catch (error) {
+            console.log(error);
+            alert(error.message || "Something went wrong while getting the comments");
+        }
+    }
 
     async function getUser() {
         try {
             const resp = await fetch(
                 "http://localhost:8000/get_user",
-                {credentials: "include"} // Tells browser to send cookie; otherwise, it doesn't work
+                {credentials: "include"} // Tells browser to send cookie; otherwise, it doesn't work, and session["user"] is None
             ); // Get the user that logged in
             if (!resp.ok) {
                 throw new Error("Failed to log in");
@@ -36,20 +49,7 @@
         }
     }
 
-    async function getComments() {
-        try {
-            const resp = await fetch("http://localhost:8000/get_comments");
-            if (!resp.ok) {
-                throw new Error("Failed to get the comments");
-            }
-            const respObj = await resp.json();
-            console.log(respObj);
-            comments = respObj;
-        } catch (error) {
-            console.log(error);
-            alert(error.message || "Something went wrong while getting the comments");
-        }
-    }
+    window.addEventListener("DOMContentLoaded", getUser); // Gets the current user
     
     /*
      -This function is called when the user presses the login button
@@ -95,9 +95,36 @@
             curComment = ""; // Reset
         }
     }
+
+    function openComments() { // Opens the comments section
+        document.getElementById("sidebar").style.position = "fixed";
+        document.getElementById("sidebar").style.background = "white";
+        document.getElementById("sidebar").style.height = "100vh";
+        document.getElementById("sidebar").style.width = "50vw";
+        document.getElementById("sidebar").style.display = "block";
+    }
+
+    function closeComments() { // Closes the comments section
+        document.getElementById("sidebar").style.display = "none";
+    }
 </script>
 
 <header> <!-- Header content -->
+    <div id="sidebar"> <!-- Dynamic sidebar -->
+        <button onclick={closeComments}>Close &times;</button>
+        <div id="comment-submission">
+            <h3>Comments</h3>
+            <form onsubmit={postComment}>
+                <label>
+                    Post a Comment: <input type="text" bind:value={curComment} />
+                </label>
+            <button type="submit">Enter</button>
+            </form>
+        </div>
+        {#each comments as comment}
+            <Comment bind:user={user} bind:_id={comment._id} bind:username={comment.username} bind:comment={comment.comment}></Comment> <!-- Only need to bind comment since that only changes in the child -->
+        {/each}
+    </div>
     <div id="header-container">
         <div id="opening-line-container">
             <div><button class="opening-line-button">SEARCH</button></div>
@@ -126,7 +153,6 @@
         <hr class="dividing-line">
     </div>
 </header>
-
 <main> <!-- Main content (including the articles and the comment section) -->
     <div class="article-container">
         <div id="first">
@@ -146,62 +172,98 @@
         </div>
     </div>
     <hr class="dividing-line">
-    {#if loggedIn} <!-- Comments section -->
-        <div id="comments-container">
-            <h3>Comments</h3>
-            <form onsubmit={postComment}>
-                <label>
-                    Post a Comment: <input type="text" bind:value={curComment} />
-                </label>
-                <button type="submit">Enter</button>
-            </form>
-        </div>
-        {#each comments as comment}
-            <Comment bind:_id={comment._id} bind:username={comment.username} bind:comment={comment.comment}></Comment>
-        {/each}
-    {:else}
-        <div id="log-in-container">
+    <div id="comments-options">
+        {#if loggedIn} <!-- Comments section button (displayed when the user is logged in) -->
+            <button id="comments-button" onclick={openComments}>OPEN COMMENTS</button>
+        {:else} <!-- Log in information prompt (displayed when the user isn't logged in) -->
             <p>Log in to comment</p>
-        </div>
-    {/if}
+        {/if}
+    </div>
 </main>
 
-
 <style>
-    #comments-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        font-family: Georgia;
+    #sidebar {
+        display: none;
+        z-index: 9999; /* To prevent overlapping from other elements */
     }
 
-    #comments-container form input {
-        font-family: Georgia;
-    }
-
-    #comments-container form button {
+    #sidebar button {
         background-color: steelblue;
         border-color: steelblue;
-        border-radius: 5px; /* Curvature of the button */
+        border-radius: 5px;
         color: white;
         font-family: Georgia;
         font-weight: 1000;
+        margin: 5px;
     }
 
-    #comments-container form button:hover {
+    #sidebar button:hover {
         background-color: rgb(0, 95, 170);
         border-color: rgb(0, 95, 170);
         cursor: pointer;
     }
 
-    #log-in-container {
+    #comment-submission {
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
         flex-wrap: nowrap;
+        font-family: Georgia;
+        margin: 10px;
+    }
+
+    #comment-submission form {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center; /* Need this */
+    }
+
+    #comment-submission form input {
+        font-family: Georgia;
+    }
+
+    #comment-submission form button {
+        background-color: steelblue;
+        border-color: steelblue;
+        border-radius: 5px;
+        color: white;
+        font-family: Georgia;
+        font-weight: 1000;
+    }
+
+    #comment-submission form button:hover {
+        background-color: rgb(0, 95, 170);
+        border-color: rgb(0, 95, 170);
+        cursor: pointer;
+    }
+
+    #comments-options {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        margin: 20px;
+    }
+
+    #comments-options button {
+        background-color: steelblue;
+        border-color: steelblue;
+        border-radius: 5px;
+        color: white;
+        font-family: Georgia;
+        font-weight: 1000;
+    }
+
+    #comments-options button:hover {
+        background-color: rgb(0, 95, 170);
+        border-color: rgb(0, 95, 170);
+        cursor: pointer;
+    }
+
+    #comments-options p {
         font-family: Georgia;
     }
 </style>

@@ -1,10 +1,11 @@
 <script lang="ts">
-    let {_id = "",                  // Contains the comment ID
+    let {user = $bindable(""),      // Stores the current user
+        _id = $bindable(""),        // Contains the comment ID
         username = $bindable(""),   // Contains the username of the original commenter
         comment = $bindable(""),    // Contains the original comment
         } = $props();
 
-    const moderatorUsername = "moderator@hw3.com"
+    const moderatorUsername = "moderator@hw3.com";
     const deletedCommentMessage = "COMMENT REMOVED BY MODERATOR!"; // This is what replaces deleted comments
 
     async function deleteComment(event: Event) {
@@ -32,10 +33,14 @@
 </script>
 
 <div id="comment-container">
-    <p>{username}: {comment}</p>
-    {#if username === moderatorUsername && comment != deletedCommentMessage} <!-- Only a moderator can remove a comment (that hasn't already been removed) -->
-        <button onclick={deleteComment}>Delete</button>
-    {/if}
+    <div>
+        <p><strong>{username}</strong>: {comment}</p>
+    </div>
+        {#if user === moderatorUsername && comment != deletedCommentMessage} <!-- Only a moderator can remove a comment (that hasn't already been removed) -->
+            <div>    
+                <button onclick={deleteComment}>Delete</button>
+            </div>
+        {/if}
 </div>
 
 <style>
@@ -44,27 +49,27 @@
         justify-content: center;
         align-items: center;
         flex-direction: row;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         font-family: Georgia;
-        gap: 2.5px;
+        gap: 5px;
+        margin: 2.5px;
     }
 
-    #comment-container > p {
-        overflow-wrap: break-word;
+    #comment-container div p {
+        overflow-wrap: break-word; /* Not exactly needed with a div maybe? */
         word-break: break-word;
-        white-space: normal;
     }
 
-    #comment-container > button {
+    #comment-container div button {
         background-color: rgb(255, 0, 0);
         border-color: red;
-        border-radius: 5px; /* Curvature of the button */
+        border-radius: 5px;
         color: white;
         font-family: Georgia;
         font-weight: 1000;
     }
 
-    #comment-container > button:hover {
+    #comment-container div button:hover {
         background-color: rgb(180, 30, 30);
         border-color: rgb(180, 30, 30);
         cursor: pointer;

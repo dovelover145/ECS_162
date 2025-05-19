@@ -1,0 +1,6 @@
+Assignment 3
+
+ChatGPT
+    -Flask routing
+    -Session cookies
+    -Debugging

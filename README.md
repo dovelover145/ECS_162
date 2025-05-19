@@ -9,3 +9,5 @@
 # New Notes
 
 ### 1. Log in through the login button
+### 2. Add comments
+### 3. Be respectful when commenting, or the moderator will remove your comment
