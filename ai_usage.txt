@@ -1,0 +1,26 @@
+*** Assignment 2 ***
+
+AI Usage
+    -URL and URLSearchParams
+    -Unit testing and mocking with Jest
+    -Scoping with the try block
+
+Stack Overflow
+    -Checking if something is undefined
+
+YouTube
+    -Introduction to Jest: https://www.youtube.com/watch?v=FgnxcUQ5vho
+
+Other
+    -https://testdriven.io/blog/flask-pytest/
+
+ChatGPT was used. It gave a good way to represent the parameters of the URL without
+having to manually change the URL string every time. Using good abstractions (like URL and
+URLSearchParams) makes coding easier.
+
+Chatgpt is used for getting the basic idea of comments logic(how to display them)
+Also it give a sence of what to write tests. The way I use chatgpt is when I
+try to implement some function, I will let GPT to give some suggestions and some sample code
+taht not directly related to the hw but will give a sense on how they looks like.
+AI Link:https://chatgpt.com/c/6828fbbf-fd28-8004-a8b6-3241bc2d7280
+https://chatgpt.com/c/682a9c65-0df8-8004-a451-e40a900b21d3

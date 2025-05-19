@@ -134,7 +134,9 @@
             };
             comment_section.appendChild(replyBtn);
             console.log(">>> currentUser check:", currentUser);
+
             if (currentUser.name ==="admin" || currentUser.name === "moderator"){
+
                 const deleteBtn = document.createElement("button");
                 deleteBtn.innerText = "Delete";
                 deleteBtn.classList.add("delete-button");
@@ -289,10 +291,14 @@
     }
     window.close_sidebar = close_sidebar;
 
+
     if (typeof module != "undefined") { /* For unit tests */
         module.exports = {
             getApiKey,
-            insertArticleContent
+            insertArticleContent,
+            listComment,
+            submitComment_Uni,
+            openSidebar
         };
     }
 })();

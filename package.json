@@ -1,0 +1,30 @@
+{
+  "name": "hw3",
+  "version": "1.0.0",
+  "main": "init-mongo.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dovelover145/ECS_162.git"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dovelover145/ECS_162/issues"
+  },
+  "homepage": "https://github.com/dovelover145/ECS_162#readme",
+  "description": "",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}
